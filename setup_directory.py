@@ -15,6 +15,16 @@ except ImportError:
 MINICONDA_URL = 'https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh'
 
 
+@contextmanager
+def change_directory(path):
+    old_cwd = os.getcwd()
+    try:
+        os.chdir(path)
+        yield
+    finally:
+        os.chdir(old_cwd)
+
+
 def main(args):
     pass
 
