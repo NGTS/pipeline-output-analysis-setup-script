@@ -80,9 +80,12 @@ def main(args):
     if args.verbose:
         logger.setLevel(logging.DEBUG)
 
+    script_url = miniconda_url()
+
     with change_directory(args.directory):
-        install_location = download_install_script()
+        install_location = download_install_script(script_url)
         install_miniconda(install_location, args.environment_name)
+    environment_path = os.path.join(args.directory, args.environment_name)
 
 
 if __name__ == '__main__':
@@ -90,6 +93,12 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--directory',
                         required=False,
                         default=os.getcwd())
-    parser.add_argument('-n', '--environment-name', required=False,
+    parser.add_argument('-n', '--environment-name',
+                        required=False,
                         default='miniconda')
+    parser.add_argument('-p', '--package',
+                        help='Custom packages to install',
+                        nargs='*',
+                        default=[])
+    parser.add_argument('-v', '--verbose', action='store_true')
     main(parser.parse_args())
