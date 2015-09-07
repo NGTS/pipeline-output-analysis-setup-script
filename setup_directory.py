@@ -116,14 +116,31 @@ def main(args):
     install_required_packages(environment_path, args.package)
     print_shell_integration_info(environment_path)
 
+
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
+    description = '''
+    Set up a miniconda installation
+    '''
+
+    epilog = '''
+    By default it installs a `miniconda` installation to the current directory
+    under the `miniconda` path. The PATH environment variable must be altered
+    to use this new installation. How to do this is explained after
+    installation completes.
+    '''
+
+    parser = argparse.ArgumentParser(
+        description=description,
+        epilog=epilog,
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-d', '--directory',
                         required=False,
-                        default=os.getcwd())
+                        default=os.getcwd(),
+                        help='Directory to install to')
     parser.add_argument('-n', '--environment-name',
                         required=False,
-                        default='miniconda')
+                        default='miniconda',
+                        help='Name to call install directory')
     parser.add_argument('-p', '--package',
                         help='Custom packages to install',
                         nargs='*',
