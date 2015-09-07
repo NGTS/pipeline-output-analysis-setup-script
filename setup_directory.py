@@ -70,10 +70,36 @@ def download_install_script(url):
 
 
 def install_miniconda(script_path, name):
-    dest = os.path.join(
-        os.getcwd(), name)
-    cmd = ['bash', script_path, '-b', '-f', '-p', dest]
-    sp.check_call(cmd)
+    logger.info('Installing miniconda to %s', name)
+    dest = os.path.join(os.getcwd(), name)
+    run('bash', script_path, '-b', '-f', '-p', dest)
+
+
+def print_shell_integration_info(environment_path):
+    print('''To activate your new environment, run:
+
+    export PATH={path}/bin:${{PATH}}'''.format(path=environment_path))
+
+
+def install_required_packages(environment_path, custom_packages):
+    default_packages = [
+        'pip',
+        'astropy',
+        'matplotlib',
+        'scipy',
+        'numpy',
+        'seaborn',
+        'ipython',
+    ]
+
+    new_env = os.environ.copy()
+    new_env['PATH'] = ':'.join([
+        os.path.join(environment_path, 'bin'), new_env['PATH']
+    ])
+    cmd = ['conda', 'install', '--yes']
+    cmd.extend(default_packages)
+    cmd.extend(custom_packages)
+    run(cmd, env=new_env)
 
 
 def main(args):
@@ -87,6 +113,8 @@ def main(args):
         install_miniconda(install_location, args.environment_name)
     environment_path = os.path.join(args.directory, args.environment_name)
 
+    install_required_packages(environment_path, args.package)
+    print_shell_integration_info(environment_path)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
