@@ -48,10 +48,12 @@ def change_directory(path):
         os.chdir(old_cwd)
 
 
-def download_install_script():
-    location = os.path.join(
-        tempfile.gettempdir(),
-        os.path.split(miniconda_url())[-1])
+def run(cmd, env=None):
+    str_cmd = list(map(str, cmd))
+    logger.debug('Running command: `%s`', ' '.join(str_cmd))
+    sp.check_call(cmd, env=env)
+
+
 def download_install_script(url):
     logger.info('Downloading install script')
     location = os.path.join(tempfile.gettempdir(), os.path.split(url)[-1])
