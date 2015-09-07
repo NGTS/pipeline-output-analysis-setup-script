@@ -22,14 +22,18 @@ def miniconda_url():
     ''' 
     Return the miniconda url for the architecture of the current machine
     '''
+    miniconda_root = 'https://repo.continuum.io/miniconda'
     endpoint_map = {
         'linux': 'Miniconda-latest-Linux-x86_64.sh',
         'darwin': 'Miniconda-latest-MacOSX-x86_64.sh',
     }
     for os_type in endpoint_map:
+        logger.debug('Trying os type: %s', os_type)
         if sys.platform.startswith(os_type):
-            return os.path.join(MINICONDA_ROOT, endpoint_map[os_type])
-
+            url = os.path.join(miniconda_root, endpoint_map[os_type])
+            logger.debug('OS type found: %s', os_type)
+            logger.info('Miniconda url: %s', url)
+            return url
 
 
 @contextmanager
