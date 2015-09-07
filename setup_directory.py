@@ -6,13 +6,28 @@ import argparse
 import os
 import subprocess as sp
 from contextlib import contextmanager
+import sys
 import tempfile
 try:
     import urllib.request as urllib2
 except ImportError:
     import urllib2
 
-MINICONDA_URL = 'https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh'
+MINICONDA_ROOT = 'https://repo.continuum.io/miniconda'
+
+
+def miniconda_url():
+    ''' 
+    Return the miniconda url for the architecture of the current machine
+    '''
+    endpoint_map = {
+        'linux': 'Miniconda-latest-Linux-x86_64.sh',
+        'darwin': 'Miniconda-latest-MacOSX-x86_64.sh',
+    }
+    for os_type in endpoint_map:
+        if sys.platform.startswith(os_type):
+            return os.path.join(MINICONDA_ROOT, endpoint_map[os_type])
+
 
 
 @contextmanager
@@ -28,10 +43,10 @@ def change_directory(path):
 def download_install_script():
     location = os.path.join(
         tempfile.gettempdir(),
-        os.path.split(MINICONDA_URL)[-1])
+        os.path.split(miniconda_url())[-1])
 
     with open(location, 'wb') as outfile:
-        response = urllib2.urlopen(MINICONDA_URL)
+        response = urllib2.urlopen(miniconda_url())
         data = response.read()
         outfile.write(data)
     return location
