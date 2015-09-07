@@ -25,13 +25,15 @@ def change_directory(path):
         os.chdir(old_cwd)
 
 
-def main(args):
-    pass
+def download_install_script():
+    location = os.path.join(
+        tempfile.gettempdir(),
+        os.path.split(MINICONDA_URL)[-1])
+
+    with open(location, 'wb') as outfile:
+        response = urllib2.urlopen(MINICONDA_URL)
+        data = response.read()
+        outfile.write(data)
+    return location
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-d', '--directory',
-                        required=False,
-                        default=os.getcwd())
-    main(parser.parse_args())
