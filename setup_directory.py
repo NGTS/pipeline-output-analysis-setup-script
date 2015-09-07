@@ -37,3 +37,10 @@ def download_install_script():
     return location
 
 
+def install_miniconda(script_path, name):
+    dest = os.path.join(
+        os.getcwd(), name)
+    cmd = ['bash', script_path, '-b', '-f', '-p', dest]
+    sp.check_call(cmd)
+
+
