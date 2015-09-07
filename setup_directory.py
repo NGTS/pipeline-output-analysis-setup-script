@@ -44,3 +44,17 @@ def install_miniconda(script_path, name):
     sp.check_call(cmd)
 
 
+def main(args):
+    with change_directory(args.directory):
+        install_location = download_install_script()
+        install_miniconda(install_location, args.environment_name)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-d', '--directory',
+                        required=False,
+                        default=os.getcwd())
+    parser.add_argument('-n', '--environment-name', required=False,
+                        default='miniconda')
+    main(parser.parse_args())
