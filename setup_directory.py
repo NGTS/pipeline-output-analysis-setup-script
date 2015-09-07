@@ -72,7 +72,7 @@ def download_install_script(url):
 def install_miniconda(script_path, name):
     logger.info('Installing miniconda to %s', name)
     dest = os.path.join(os.getcwd(), name)
-    run('bash', script_path, '-b', '-f', '-p', dest)
+    run(['bash', script_path, '-b', '-f', '-p', dest])
 
 
 def print_shell_integration_info(environment_path):
